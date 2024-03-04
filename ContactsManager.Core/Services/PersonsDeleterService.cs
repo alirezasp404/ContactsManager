@@ -1,4 +1,5 @@
-﻿using ContactsManager.Core.Domain.RepositoryContracts;
+﻿using ContactsManager.Core.Domain.Entities;
+using ContactsManager.Core.Domain.RepositoryContracts;
 using ContactsManager.Core.ServiceContracts;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -17,9 +18,18 @@ namespace ContactsManager.Core.Services
             _logger = logger;
             _personRepository = personsRepository;
         }
-        public Task<bool> DeletePerson(Guid? personId)
+        public async Task<bool> DeletePerson(Guid? personID)
         {
-            throw new NotImplementedException();
+            if (personID == null)
+            {
+                throw new ArgumentNullException(nameof(personID));
+            }
+            Person? person = await _personRepository.GetPersonByPersonId(personID.Value);
+            if (person == null)
+                return false;
+
+            await _personRepository.DeletePersonByPersonId(personID.Value);
+            return true;
         }
     }
 }

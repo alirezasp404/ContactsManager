@@ -1,5 +1,6 @@
 ﻿using ContactsManager.Core.Domain.RepositoryContracts;
 using ContactsManager.Core.DTO;
+using ContactsManager.Core.Helpers;
 using ContactsManager.Core.ServiceContracts;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -18,9 +19,23 @@ namespace ContactsManager.Core.Services
             _logger = logger;
             _personRepository = personsRepository;
         }
-        public Task<PersonResponse> AddPerson(PersonAddRequest personAddRequest)
+        public async Task<PersonResponse> AddPerson(PersonAddRequest? personAddRequest)
         {
-            throw new NotImplementedException();
+            if (personAddRequest == null)
+            {
+                throw new ArgumentNullException(nameof(personAddRequest));
+            }
+            //Model validation
+            ValidationHelper.ModelValidation(personAddRequest);
+
+            var person = personAddRequest.ToPerson();
+
+            person.PersonID = Guid.NewGuid();
+
+            await _personRepository.AddPerson(person);
+
+            return person.ToPersonResponse();
+
         }
     }
 }
