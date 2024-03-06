@@ -1,11 +1,8 @@
-﻿using ContactsManager.Core.Domain.RepositoryContracts;
+﻿using ContactsManager.Core.Domain.Entities;
+using ContactsManager.Core.Domain.RepositoryContracts;
 using ContactsManager.Core.DTO;
 using ContactsManager.Core.ServiceContracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ContactsManager.Core.Services
 {
@@ -20,14 +17,22 @@ namespace ContactsManager.Core.Services
             _countriesRepository = countriesRepository;
 
         }
-        public Task<List<CountryResponse>> GetAllCountries()
+        public async Task<List<CountryResponse>> GetAllCountries()
         {
-            throw new NotImplementedException();
+
+            return (await _countriesRepository.GetAllCountries()).Select(c => c.ToCountryResponse()).ToList();
         }
 
-        public Task<CountryResponse?> GetCountryByID(Guid? countryId)
+        public async Task<CountryResponse?> GetCountryByID(Guid? countryID)
         {
-            throw new NotImplementedException();
+            if (countryID == null) { return null; }
+
+            Country? countryResponseFromList = await _countriesRepository.GetCountryByCountryId(countryID.Value);
+
+            if (countryResponseFromList == null) { return null; }
+
+            return countryResponseFromList.ToCountryResponse();
+
         }
     }
 }
