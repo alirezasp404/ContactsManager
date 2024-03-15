@@ -1,7 +1,6 @@
-
+using Serilog;
 using ContactsManager.UI.Middleware;
 using ContactsManager.UI.StartupExtensions;
-using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, LoggerConfiguration loggerConfiguration) =>
@@ -39,3 +38,4 @@ app.UseRouting();
 app.MapControllers();
 app.Run();
 
+public partial class Program { }

@@ -21,10 +21,12 @@
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.8.0" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="5.2.1" />
 	</ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="ContactsManager.IntegrationTests"></InternalsVisibleTo>
+	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\ContactsManager.Core\ContactsManager.Core.csproj" />
 	  <ProjectReference Include="..\ContactsManager.Infrastructure\ContactsManager.Infrastructure.csproj" />
 	</ItemGroup>
-
 </Project>
