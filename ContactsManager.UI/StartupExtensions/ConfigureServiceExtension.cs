@@ -8,6 +8,7 @@ using ContactsManager.Core.Domain.RepositoryContracts;
 using ContactsManager.Infrastructure.Repositories;
 using ContactsManager.Core.Services;
 using ContactsManager.Infrastructure.DbContext;
+using ContactsManager.Core.Domain.IdentityEntities;
 
 namespace ContactsManager.UI.StartupExtensions
 {
@@ -31,7 +32,31 @@ namespace ContactsManager.UI.StartupExtensions
             services.AddScoped<IPersonsUpdaterService, PersonsUpdaterService>();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.Password.RequiredLength = 5;
+                options.Password.RequireNonAlphanumeric = false;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
+                .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
+                .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser()
+                .Build();
+                options.AddPolicy("NotAuthorized", policy =>
+                {
+                    policy.RequireAssertion(context =>
+                    {
+                        return !context.User.Identity.IsAuthenticated;
+                    });
+                });
+            });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+            });
             services.AddHttpLogging(options => options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders |
             Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestProperties);
             return services;

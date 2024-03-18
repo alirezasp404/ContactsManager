@@ -29,4 +29,8 @@
 	  <ProjectReference Include="..\ContactsManager.Core\ContactsManager.Core.csproj" />
 	  <ProjectReference Include="..\ContactsManager.Infrastructure\ContactsManager.Infrastructure.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Areas\Admin\Models\" />
+	</ItemGroup>
 </Project>
