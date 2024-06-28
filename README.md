@@ -1,5 +1,5 @@
 ## Contacts Manager
-** This is a simple web application implemented with ASP.NET Core and Razor Pages.
+** This is a simple web application implemented with ASP.NET Core and Razor Views.
 ** The application is built To learn ASP.NET MVC and Clean Architecture.<br>
 **The application has the following features:**
 * A simple user interface
